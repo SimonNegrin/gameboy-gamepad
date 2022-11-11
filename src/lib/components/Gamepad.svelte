@@ -1,26 +1,28 @@
 <script>
+  import { gamepadState, sendGamepadStatePacket } from "../services/realTime"
   import ActionBtn from "./ActionBtn.svelte"
   import ControlBtn from "./ControlBtn.svelte"
   import Joystick from "./Joystick.svelte"
 
-  function onJoystickUpdate({ detail: { vector, enabled } }) {
-    console.log({ vector, enabled })
+  function onJoystickUpdate({ detail: direction }) {
+    if (gamepadState.joystickDir !== direction) {
+      gamepadState.joystickDir = direction
+      sendGamepadStatePacket()
+    }
   }
 
-  function onActionADown() {
-    console.log('Action A down')
+  function onActionAUpdate({ detail: state }) {
+    if (gamepadState.actionA !== state) {
+      gamepadState.actionA = state
+      sendGamepadStatePacket()
+    }
   }
-
-  function onActionAUp() {
-    console.log('Action A up')
-  }
-
-  function onActionBDown() {
-    console.log('Action B down')
-  }
-
-  function onActionBUp() {
-    console.log('Action B up')
+  
+  function onActionBUpdate({ detail: state }) {
+    if (gamepadState.actionB !== state) {
+      gamepadState.actionB = state
+      sendGamepadStatePacket()
+    }
   }
 
   function onStart() {
@@ -47,14 +49,12 @@
   <div class="zone right">
     <div class="action-btn action-a">
       <ActionBtn
-        on:down={onActionADown}
-        on:up={onActionAUp}
+        on:update={onActionAUpdate}
         />
     </div>
     <div class="action-btn action-b">
       <ActionBtn
-        on:down={onActionBDown}
-        on:up={onActionBUp}
+        on:update={onActionBUpdate}
         />
     </div>
   </div>

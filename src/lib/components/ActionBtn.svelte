@@ -4,11 +4,11 @@
   const dispatch = createEventDispatcher()
 
   function onTouchstart() {
-    dispatch('down')
+    dispatch('update', true)
   }
 
   function onTouchend() {
-    dispatch('up')
+    dispatch('update', false)
   }
 
 </script>

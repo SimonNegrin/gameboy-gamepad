@@ -1,6 +1,6 @@
 <script>
   import { createEventDispatcher } from "svelte"
-  import { calcDistance } from "../services/geometry"
+  import { calcDistance, getVectorDir } from "../services/geometry"
 
   const threshold = 30
   const dispatch = createEventDispatcher()
@@ -17,13 +17,20 @@
     const vector = [x, y]
     controlEl.style.transform = `translate(${x}px, ${y}px)`
     enabled = calcDistance([0, 0], vector) > threshold
-    dispatch('update', { vector, enabled })
+
+    if (!enabled) {
+      dispatch('update', null)
+      return
+    }
+
+    // @ts-ignore
+    dispatch('update', getVectorDir(vector))
   }
 
   const onTouchend = () => {
     controlEl.style.transform = 'translate(0px, 0px)'
     enabled = false
-    dispatch('update', { vector: [0, 0], enabled })
+    dispatch('update', null)
   }
 
 </script>
