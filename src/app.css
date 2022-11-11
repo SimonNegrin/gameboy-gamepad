@@ -1,4 +1,9 @@
 
+:root {
+  --control-idle-color: #555;
+  --control-enabled-color: rgb(100, 213, 34);
+}
+
 body {
   margin: 0;
 }

@@ -53,11 +53,11 @@
   .control {
     width: 50px;
     height: 50px;
-    background-color: #555;
+    background-color: var(--control-idle-color);
     border-radius: 50%;
 
     &.enabled {
-      background-color: green;
+      background-color: var(--control-enabled-color);
     }
   }
 
