@@ -1,5 +1,5 @@
 <script>
-  import Control from "./lib/components/Control.svelte"
+  import Control from "./lib/components/Gamepad.svelte"
   
 
 </script>
