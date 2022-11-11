@@ -9,7 +9,7 @@
   let controlEl
   let enabled = false
 
-  const onTouchmove = event => {
+  const onTouchstartOrTouchmove = event => {
     const { clientX, clientY } = event.touches[0]
     const { left, top, width, height } = joystickEl.getBoundingClientRect()
     const x = clientX - (left + width / 2)
@@ -38,7 +38,8 @@
 <div
   bind:this={joystickEl}
   class="joystick"
-  on:touchmove={onTouchmove}
+  on:touchstart={onTouchstartOrTouchmove}
+  on:touchmove={onTouchstartOrTouchmove}
   on:touchend={onTouchend}
   >
   <div
