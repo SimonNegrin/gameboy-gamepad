@@ -1,9 +1,23 @@
 <script>
-  import { tap } from "../services/tap"
+  import { createEventDispatcher } from "svelte"
+
+  const dispatch = createEventDispatcher()
+
+  const onTouchstart = () => {
+    dispatch('update', true)
+  }
+  
+  const onTouchend = () => {
+    dispatch('update', false)
+  }
 
 </script>
 
-<button type="button" use:tap on:tap></button>
+<button
+  type="button"
+  on:touchstart={onTouchstart}
+  on:touchend={onTouchend}
+  ></button>
 
 <style lang="scss">
 

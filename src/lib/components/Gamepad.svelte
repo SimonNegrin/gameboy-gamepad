@@ -4,33 +4,13 @@
   import ControlBtn from "./ControlBtn.svelte"
   import Joystick from "./Joystick.svelte"
 
-  function onJoystickUpdate({ detail: direction }) {
-    if (gamepadState.joystickDir !== direction) {
-      gamepadState.joystickDir = direction
-      sendGamepadStatePacket()
+  const onBtnUpdate = prop => {
+    return ({ detail: state }) => {
+      if (gamepadState[prop] !== state) {
+        gamepadState[prop] = state
+        sendGamepadStatePacket()
+      }
     }
-  }
-
-  function onActionAUpdate({ detail: state }) {
-    if (gamepadState.actionA !== state) {
-      gamepadState.actionA = state
-      sendGamepadStatePacket()
-    }
-  }
-  
-  function onActionBUpdate({ detail: state }) {
-    if (gamepadState.actionB !== state) {
-      gamepadState.actionB = state
-      sendGamepadStatePacket()
-    }
-  }
-
-  function onStart() {
-    console.log('Start')
-  }
-
-  function onSelect() {
-    console.log('Select')
   }
 
 </script>
@@ -38,24 +18,20 @@
 <div class="gamepad" on:touchstart|preventDefault>
 
   <div class="control">
-    <ControlBtn on:tap={onSelect} />
-    <ControlBtn on:tap={onStart} />
+    <ControlBtn on:update={onBtnUpdate('select')} />
+    <ControlBtn on:update={onBtnUpdate('start')} />
   </div>
 
   <div class="zone left">
-    <Joystick on:update={onJoystickUpdate} />
+    <Joystick on:update={onBtnUpdate('joystickDir')} />
   </div>
   
   <div class="zone right">
     <div class="action-btn action-a">
-      <ActionBtn
-        on:update={onActionAUpdate}
-        />
+      <ActionBtn on:update={onBtnUpdate('actionA')} />
     </div>
     <div class="action-btn action-b">
-      <ActionBtn
-        on:update={onActionBUpdate}
-        />
+      <ActionBtn on:update={onBtnUpdate('actionB')} />
     </div>
   </div>
 
