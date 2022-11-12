@@ -18,8 +18,14 @@
 <div class="gamepad" on:touchstart|preventDefault>
 
   <div class="control">
-    <ControlBtn on:update={onBtnUpdate('select')} />
-    <ControlBtn on:update={onBtnUpdate('start')} />
+    <div>
+      <div class="control-label">Select</div>
+      <ControlBtn on:update={onBtnUpdate('select')} />
+    </div>
+    <div>
+      <div class="control-label">Start</div>
+      <ControlBtn on:update={onBtnUpdate('start')} />
+    </div>
   </div>
 
   <div class="zone left">
@@ -57,6 +63,11 @@
     justify-content: space-between;
   }
 
+  .control-label {
+    font-size: 0.9em;
+    text-align: center;
+  }
+
   .zone {
     position: relative;
     width: 50%;
@@ -76,12 +87,12 @@
 
   .action-a {
     right: 50px;
-    bottom: 150px;
+    bottom: 50%;
   }
 
   .action-b {
-    right: 100px;
-    bottom: 100px;
+    right: 150px;
+    bottom: calc(50% - 50px);
   }
 
 </style>

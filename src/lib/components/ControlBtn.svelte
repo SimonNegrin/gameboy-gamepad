@@ -25,7 +25,7 @@
     width: 50px;
     height: 20px;
     border-radius: 9999px;
-    background-color: yellow;
+    background-color: var(--control-idle-color);
     border: none;
   }
 
