@@ -1,15 +1,35 @@
 <script>
-  import { gamepadState, sendGamepadStatePacket } from "../services/realTime"
-  import ActionBtn from "./ActionBtn.svelte"
+  import { DIR_LEFT, DIR_LEFT_BOTTOM, DIR_LEFT_TOP, DIR_RIGHT, DIR_RIGHT_BOTTOM, DIR_RIGHT_TOP } from '../services/geometry'
+  import { sendGamepadStatePacket } from "../services/realTime"
   import ControlBtn from "./ControlBtn.svelte"
   import Joystick from "./Joystick.svelte"
+
+  const gamepadState = {
+    leftJoystick  : null,
+    rightJoystick : null,
+    start         : false,
+    select        : false,
+  }
 
   const onBtnUpdate = prop => {
     return ({ detail: state }) => {
       if (gamepadState[prop] !== state) {
         gamepadState[prop] = state
-        sendGamepadStatePacket()
+        sendGamepadStatePacket(gamepadState)
       }
+    }
+  }
+
+  const mapRightJoystickToAction = (onBtnUpdateHandler) => {
+    return ({ detail }) => {
+      if ([DIR_LEFT, DIR_LEFT_BOTTOM, DIR_LEFT_TOP].includes(detail)) {
+        detail = DIR_LEFT
+      } else if ([DIR_RIGHT, DIR_RIGHT_BOTTOM, DIR_RIGHT_TOP].includes(detail)) {
+        detail = DIR_RIGHT
+      } else {
+        detail = null
+      }
+      onBtnUpdateHandler({ detail })
     }
   }
 
@@ -23,22 +43,24 @@
       <ControlBtn on:update={onBtnUpdate('select')} />
     </div>
     <div>
-      <div class="control-label">Start</div>
+      <div class="control-label control-start">Start</div>
       <ControlBtn on:update={onBtnUpdate('start')} />
     </div>
   </div>
 
   <div class="zone left">
-    <Joystick on:update={onBtnUpdate('joystickDir')} />
+    <Joystick
+      on:update={onBtnUpdate('leftJoystick')}
+      />
   </div>
   
   <div class="zone right">
-    <div class="action-btn action-a">
-      <ActionBtn on:update={onBtnUpdate('actionA')} />
-    </div>
-    <div class="action-btn action-b">
-      <ActionBtn on:update={onBtnUpdate('actionB')} />
-    </div>
+    <div class="action action-b">B</div>
+    <div class="action action-a">A</div>
+    <Joystick
+      threshold={12}
+      on:update={mapRightJoystickToAction(onBtnUpdate('rightJoystick'))}
+      />
   </div>
 
 </div>
@@ -68,31 +90,42 @@
     text-align: center;
   }
 
+  .control-start {
+    filter: invert(1);
+  }
+
   .zone {
     position: relative;
     width: 50%;
 
     &.left {
-      background-color: bisque;
+      background-color: rgb(214, 214, 214);
     }
 
     &.right {
-      background-color: burlywood;
+      background-color: rgb(214, 214, 214);
+      filter: invert(1);
     }
   }
 
-  .action-btn {
+  .action {
+    --size: 30px;
     position: absolute;
-  }
+    background-color: #aaa;
+    border-radius: 50%;
+    width: var(--size);
+    height: var(--size);
+    display: grid;
+    place-content: center;
+    top: calc(50% - var(--size) * 0.5);
 
-  .action-a {
-    right: 50px;
-    bottom: 50%;
-  }
+    &.action-b {
+      left: calc(50% - (var(--size) * 0.5) - 60px);
+    }
 
-  .action-b {
-    right: 150px;
-    bottom: calc(50% - 50px);
+    &.action-a {
+      left: calc(50% - (var(--size) * 0.5) + 60px);
+    }
   }
 
 </style>

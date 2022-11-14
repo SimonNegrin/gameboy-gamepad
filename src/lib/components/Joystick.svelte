@@ -3,9 +3,10 @@
   import { calcDistance, getVectorDir } from "../services/geometry"
   import Chevron from './Chevron.svelte'
 
-  const threshold = 30
-  const dispatch = createEventDispatcher()
+  export let threshold = 30
 
+  const dispatch = createEventDispatcher()
+  
   let joystickEl
   let controlEl
   let enabled = false

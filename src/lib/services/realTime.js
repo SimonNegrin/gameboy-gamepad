@@ -22,33 +22,29 @@ const joystickDirections = {
   [DIR_LEFT_TOP]      : 1 << 6 | 1 << 7,
 }
 
-const socket = new WebSocket(new URL('/gamepad/1', import.meta.env.VITE_REAL_TIME_SERVICE))
+// const socket = new WebSocket(new URL('/gamepad/1', import.meta.env.VITE_REAL_TIME_SERVICE))
 
-export const gamepadState = {
-  joystickDir : null,
-  actionA     : false,
-  actionB     : false,
-  start       : false,
-  select      : false,
-}
-
-export const sendGamepadStatePacket = () => {
-  const state = createGamepadStatusPacket()
-  const packet = new Uint8Array(2)
-  packet[0] = PACKET_GAMEPAD_STATE
-  packet[1] = state
-  socket.send(packet)
+export const sendGamepadStatePacket = (gamepadState) => {
+  const state = createGamepadStatusPacket(gamepadState)
   console.log(state.toString(2).padStart(8, '0'))
+  // const packet = new Uint8Array(2)
+  // packet[0] = PACKET_GAMEPAD_STATE
+  // packet[1] = state
+  // socket.send(packet)
 }
 
-const createGamepadStatusPacket = () => {
+const createGamepadStatusPacket = (gamepadState) => {
   // Packet [top, bottom, left, right, actA, actB, start, select]
-  let packet = gamepadState.joystickDir !== null
-    ? joystickDirections[gamepadState.joystickDir]
-    : 0
 
-  if (gamepadState.actionA)  packet |= 1 << 3
-  if (gamepadState.actionB)  packet |= 1 << 2
+  let packet = gamepadState.leftJoystick !== null
+    ? joystickDirections[gamepadState.leftJoystick]
+    : 0
+  
+  switch (gamepadState.rightJoystick) {
+    case DIR_LEFT:  packet |= 1 << 2; break;
+    case DIR_RIGHT: packet |= 1 << 3; break;
+  }
+
   if (gamepadState.start)    packet |= 1 << 1
   if (gamepadState.select)   packet |= 1
 
