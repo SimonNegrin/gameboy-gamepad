@@ -49,7 +49,6 @@ export const sendGamepadStatePacket = (gamepadState) => {
 
 const createGamepadStatusPacket = (gamepadState) => {
   // Packet [top, bottom, left, right, actA, actB, start, select]
-
   let packet = gamepadState.leftJoystick !== null
     ? joystickDirections[gamepadState.leftJoystick]
     : 0

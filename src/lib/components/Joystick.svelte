@@ -11,8 +11,8 @@
   let controlEl
   let enabled = false
 
-  const onTouchstartOrTouchmove = event => {
-    const { clientX, clientY } = event.touches[0]
+  const onTouchstartOrTouchmove = ({ targetTouches }) => {
+    const { clientX, clientY } = targetTouches[0]
     const { left, top, width, height } = joystickEl.getBoundingClientRect()
     const x = clientX - (left + width / 2)
     const y = clientY - (top + height / 2)

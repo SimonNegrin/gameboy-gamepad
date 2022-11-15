@@ -1,5 +1,12 @@
 <script>
-  import { DIR_LEFT, DIR_LEFT_BOTTOM, DIR_LEFT_TOP, DIR_RIGHT, DIR_RIGHT_BOTTOM, DIR_RIGHT_TOP } from '../services/geometry'
+  import {
+    DIR_LEFT,
+    DIR_LEFT_BOTTOM,
+    DIR_LEFT_TOP,
+    DIR_RIGHT,
+    DIR_RIGHT_BOTTOM,
+    DIR_RIGHT_TOP
+  } from '../services/geometry'
   import { sendGamepadStatePacket } from "../services/realTime"
   import ControlBtn from "./ControlBtn.svelte"
   import Joystick from "./Joystick.svelte"
@@ -21,10 +28,12 @@
   }
 
   const mapRightJoystickToAction = (onBtnUpdateHandler) => {
+    const leftDirections = new Set([DIR_LEFT, DIR_LEFT_BOTTOM, DIR_LEFT_TOP])
+    const rightDirections = new Set([DIR_RIGHT, DIR_RIGHT_BOTTOM, DIR_RIGHT_TOP])
     return ({ detail }) => {
-      if ([DIR_LEFT, DIR_LEFT_BOTTOM, DIR_LEFT_TOP].includes(detail)) {
+      if (leftDirections.has(detail)) {
         detail = DIR_LEFT
-      } else if ([DIR_RIGHT, DIR_RIGHT_BOTTOM, DIR_RIGHT_TOP].includes(detail)) {
+      } else if (rightDirections.has(detail)) {
         detail = DIR_RIGHT
       } else {
         detail = null

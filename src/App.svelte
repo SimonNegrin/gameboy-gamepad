@@ -1,7 +1,7 @@
 <script>
-  import Control from "./lib/components/Gamepad.svelte"
+  import Gamepad from "./lib/components/Gamepad.svelte"
   
 
 </script>
 
-<Control />
+<Gamepad />
