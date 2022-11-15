@@ -20,17 +20,31 @@ const joystickDirections = {
   [DIR_LEFT_BOTTOM]   : 1 << 5 | 1 << 6,
   [DIR_LEFT]          : 1 << 5,
   [DIR_LEFT_TOP]      : 1 << 6 | 1 << 7,
+} 
+
+const createSocket = () => {
+  const params = new URLSearchParams(window.location.search)
+  if (!params.has('emuId')) {
+    throw new Error('Param emuId is required')
+  }
+  const emuId = params.get('emuId')
+  return new WebSocket(
+    new URL(
+      `/gamepad/${emuId}`,
+      import.meta.env.VITE_REAL_TIME_SERVICE
+    )
+  )
 }
 
-// const socket = new WebSocket(new URL('/gamepad/1', import.meta.env.VITE_REAL_TIME_SERVICE))
+const socket = createSocket()
 
 export const sendGamepadStatePacket = (gamepadState) => {
   const state = createGamepadStatusPacket(gamepadState)
   console.log(state.toString(2).padStart(8, '0'))
-  // const packet = new Uint8Array(2)
-  // packet[0] = PACKET_GAMEPAD_STATE
-  // packet[1] = state
-  // socket.send(packet)
+  const packet = new Uint8Array(2)
+  packet[0] = PACKET_GAMEPAD_STATE
+  packet[1] = state
+  socket.send(packet)
 }
 
 const createGamepadStatusPacket = (gamepadState) => {
@@ -45,8 +59,8 @@ const createGamepadStatusPacket = (gamepadState) => {
     case DIR_RIGHT: packet |= 1 << 3; break;
   }
 
-  if (gamepadState.start)    packet |= 1 << 1
-  if (gamepadState.select)   packet |= 1
+  if (gamepadState.start)   packet |= 1 << 1
+  if (gamepadState.select)  packet |= 1
 
   return packet
   
