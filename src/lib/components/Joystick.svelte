@@ -4,6 +4,7 @@
   import Chevron from './Chevron.svelte'
 
   export let threshold = 30
+  export let maxSize = 280
 
   const dispatch = createEventDispatcher()
   
@@ -39,6 +40,7 @@
 
 <div
   bind:this={joystickEl}
+  style="--max-size: {maxSize}px"
   class="joystick"
   on:touchstart={onTouchstartOrTouchmove}
   on:touchmove={onTouchstartOrTouchmove}
@@ -69,6 +71,8 @@
     position: relative;
     width: 100%;
     height: 100%;
+    max-width: var(--max-size);
+    max-height: var(--max-size);
   }
 
   .frame {

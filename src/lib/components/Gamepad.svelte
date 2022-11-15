@@ -47,14 +47,8 @@
 <div class="gamepad" on:touchstart|preventDefault>
 
   <div class="control">
-    <div>
-      <div class="control-label">Select</div>
-      <ControlBtn on:update={onBtnUpdate('select')} />
-    </div>
-    <div>
-      <div class="control-label control-start">Start</div>
-      <ControlBtn on:update={onBtnUpdate('start')} />
-    </div>
+    <ControlBtn on:update={onBtnUpdate('select')}>Select</ControlBtn>
+    <ControlBtn invert on:update={onBtnUpdate('start')}>Start</ControlBtn>
   </div>
 
   <div class="zone left">
@@ -64,8 +58,10 @@
   </div>
   
   <div class="zone right">
-    <div class="action action-b">B</div>
-    <div class="action action-a">A</div>
+    <div class="indicators">
+      <div class="action action-b">B</div>
+      <div class="action action-a">A</div>
+    </div>
     <Joystick
       threshold={12}
       on:update={mapRightJoystickToAction(onBtnUpdate('rightJoystick'))}
@@ -87,34 +83,38 @@
     position: absolute;
     z-index: 2;
     width: $width;
-    height: 20px;
     top: 30px;
     left: calc(50% - #{$width * 0.5});
     display: flex;
     justify-content: space-between;
   }
 
-  .control-label {
-    font-size: 0.9em;
-    text-align: center;
-  }
-
-  .control-start {
-    filter: invert(1);
-  }
-
   .zone {
     position: relative;
     width: 50%;
+    display: flex;
+    align-items: flex-end;
 
     &.left {
       background-color: rgb(214, 214, 214);
     }
 
     &.right {
+      justify-content: flex-end;
       background-color: rgb(214, 214, 214);
       filter: invert(1);
     }
+  }
+
+  .indicators {
+    --max-size: 280px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    max-width: var(--max-size);
+    max-height: var(--max-size);
   }
 
   .action {
