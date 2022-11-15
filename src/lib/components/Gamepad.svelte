@@ -18,6 +18,8 @@
     select        : false,
   }
 
+  let viewportHeight = window.innerHeight
+
   const onBtnUpdate = prop => {
     return ({ detail: state }) => {
       if (gamepadState[prop] !== state) {
@@ -44,7 +46,13 @@
 
 </script>
 
-<div class="gamepad" on:touchstart|preventDefault>
+<svelte:window bind:innerHeight={viewportHeight} />
+
+<div
+  style="--vh: {viewportHeight}px"
+  class="gamepad"
+  on:touchstart|preventDefault
+  >
 
   <div class="control">
     <ControlBtn on:update={onBtnUpdate('select')}>Select</ControlBtn>
@@ -74,7 +82,7 @@
 
   .gamepad {
     position: relative;
-    height: 100vh;
+    height: var(--vh, 100vh);
     display: flex;
   }
 
